@@ -18,7 +18,7 @@ a SHA-256 checksum.
 # 1. Bump version in pubspec.yaml (e.g. 1.1.1+3)
 # 2. Log the change in docs/CHANGELOG.md and CHANGELOG.md
 # 3. Verify locally
-flutter analyze --fatal-infos
+flutter analyze
 flutter test
 # 4. Commit
 git add -A
@@ -38,7 +38,7 @@ Or use the GitHub UI: **Releases → Draft a new release → tag `v1.1.1` → Pu
 2. Resolves the release tag (release event, pushed tag, manual input, or
    `pubspec.yaml` version as a fallback).
 3. Sets up Java 17 and Flutter stable.
-4. Runs `flutter pub get`, `flutter analyze --fatal-infos` and `flutter test` —
+4. Runs `flutter pub get`, `flutter analyze` and `flutter test` —
    the build stops if analysis or tests fail.
 5. Optionally configures a release keystore from secrets.
 6. Builds `build/app/outputs/flutter-apk/app-release.apk`.

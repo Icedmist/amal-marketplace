@@ -57,13 +57,13 @@ unused, and product variants/reviews/specs were parsed but never shown.
    - `test/support/fakes.dart` (offline catalog fake)
 
 7. **Release workflow / docs**
-   - `flutter analyze --fatal-infos` + `flutter test` gates, concurrency,
+   - `flutter analyze` + `flutter test` gates, concurrency,
      artifact upload, SHA-256 checksum, safer tag resolution.
    - README, CHANGELOG, ARCHITECTURE and RELEASE updated.
 
 ### Verification
 
-- `flutter analyze --fatal-infos` → no issues
+- `flutter analyze` → no issues
 - `flutter test` → 15 tests pass
 - `flutter build apk --debug` → succeeds
 

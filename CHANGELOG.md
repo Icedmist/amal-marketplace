@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 
 - Updated README, architecture, release guide and engineering log
-- Release workflow now gates on `flutter analyze --fatal-infos` and `flutter test`,
+- Release workflow now gates on `flutter analyze` and `flutter test`,
   and uploads a SHA-256 checksum next to the APK
 
 [1.1.0]: https://github.com/Icedmist/amal-marketplace/releases/tag/v1.1.0

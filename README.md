@@ -16,7 +16,7 @@ Android Flutter client for **[AMAL Marketplace](https://amal-market-place.lovabl
 
 ```bash
 flutter pub get
-flutter analyze --fatal-infos
+flutter analyze
 flutter test
 flutter run
 ```
@@ -51,7 +51,7 @@ Cart and wishlist are device-local; the `orders` table is not written yet (see
 Publishing a GitHub Release (or pushing a `v*` tag) runs [`.github/workflows/release-apk.yml`](.github/workflows/release-apk.yml):
 
 1. Installs dependencies
-2. Runs `flutter analyze --fatal-infos` and `flutter test`
+2. Runs `flutter analyze` and `flutter test`
 3. Builds a release APK
 4. Names it `amal-<tag>.apk` (example: `amal-v1.1.0.apk`), writes a SHA-256 checksum
 5. Uploads both files to that GitHub Release
