@@ -38,8 +38,9 @@ Or use the GitHub UI: **Releases → Draft a new release → tag `v1.1.1` → Pu
 2. Resolves the release tag (release event, pushed tag, manual input, or
    `pubspec.yaml` version as a fallback).
 3. Sets up Java 17 and Flutter stable.
-4. Runs `flutter pub get`, `flutter analyze` and `flutter test` —
-   the build stops if analysis or tests fail.
+4. Runs `flutter pub get`, `flutter analyze --no-fatal-infos` and
+   `flutter test` — the build stops on analyzer errors/warnings or test
+   failures. SDK deprecation notices are reported but do not block a release.
 5. Optionally configures a release keystore from secrets.
 6. Builds `build/app/outputs/flutter-apk/app-release.apk`.
 7. Copies it to `dist/amal-<tag>.apk`, writes `amal-<tag>.apk.sha256`, and
