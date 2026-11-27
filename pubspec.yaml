@@ -1,7 +1,7 @@
 name: amal_marketplace
 description: AMAL — Ahmad Market Link. Nigerian marketplace Flutter app.
 publish_to: 'none'
-version: 1.1.0+2
+version: 1.2.0+3
 
 environment:
   sdk: ^3.13.7

@@ -5,6 +5,22 @@ All notable versioned releases of the AMAL Flutter Android app.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0/).
 
+## [1.2.0] — 2026-11-27
+
+### Added
+
+- Shopper accounts via Supabase email/password (`lib/state/auth_state.dart`, `lib/screens/auth_screen.dart`) with sign-up, sign-in, password reset, and Nigerian phone normalization
+- Account screen tabs for Orders, Profile, Saved Addresses (add/default/delete), and Alerts with unread indicators
+- Server-validated checkout via `MobileOrderApi` (`/api/public/mobile/`) supporting Paystack, WhatsApp confirmation, and Cash on Delivery
+- Order confirmation and tracking screen (`lib/screens/order_detail_screen.dart`) with status timeline, payment status, Paystack checkout launcher, and payment re-check action
+
+### Changed
+
+- Checkout now requires a signed-in shopper account and clears cart only after server order creation
+- Version bumped to `1.2.0+3`
+
+[1.2.0]: https://github.com/Icedmist/amal-marketplace/releases/tag/v1.2.0
+
 ## [1.1.0] — 2026-11-24
 
 ### Added
