@@ -27,6 +27,10 @@ Release APK:
 flutter build apk --release
 ```
 
+Download the latest build from
+[GitHub Releases](https://github.com/Icedmist/amal-marketplace/releases/latest)
+(`amal-v1.1.0.apk` + `.sha256`).
+
 ## Checkout (v1)
 
 Checkout collects the customer's name, phone, state, city, address and delivery

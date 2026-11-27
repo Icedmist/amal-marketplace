@@ -37,7 +37,7 @@ Or use the GitHub UI: **Releases → Draft a new release → tag `v1.1.1` → Pu
 1. Checks out the tagged revision.
 2. Resolves the release tag (release event, pushed tag, manual input, or
    `pubspec.yaml` version as a fallback).
-3. Sets up Java 17 and Flutter stable.
+3. Sets up Java 17 and the pinned Flutter `3.50.1` SDK.
 4. Runs `flutter pub get`, `flutter analyze --no-fatal-infos` and
    `flutter test` — the build stops on analyzer errors/warnings or test
    failures. SDK deprecation notices are reported but do not block a release.

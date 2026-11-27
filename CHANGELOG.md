@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   guest entry
 - Catalog search sanitizes PostgREST control characters
 - Delivery fee no longer treats an empty city as a free zone
+- Release CI pins Flutter `3.50.1` and uses Android Gradle Plugin `9.1.1`
+  with Gradle `9.5.0`
 - Version bumped to `1.1.0+2`; removed the unused `shimmer` dependency
 
 ### Fixed

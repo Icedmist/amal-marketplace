@@ -57,8 +57,11 @@ unused, and product variants/reviews/specs were parsed but never shown.
    - `test/support/fakes.dart` (offline catalog fake)
 
 7. **Release workflow / docs**
-   - `flutter analyze` + `flutter test` gates, concurrency,
+   - `flutter analyze --no-fatal-infos` + `flutter test` gates, concurrency,
      artifact upload, SHA-256 checksum, safer tag resolution.
+   - Flutter pinned to `3.50.1`; Android Gradle Plugin bumped to `9.1.1`
+     (minimum required by that Flutter release) and the Gradle wrapper to
+     `9.5.0` (minimum recommended by that Flutter release).
    - README, CHANGELOG, ARCHITECTURE and RELEASE updated.
 
 ### Verification
