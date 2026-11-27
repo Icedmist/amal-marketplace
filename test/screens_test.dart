@@ -5,6 +5,8 @@ import 'package:amal_marketplace/screens/product_detail_screen.dart';
 import 'package:amal_marketplace/screens/shell_screen.dart';
 import 'package:amal_marketplace/screens/welcome_screen.dart';
 import 'package:amal_marketplace/services/catalog_service.dart';
+import 'package:amal_marketplace/services/order_api.dart';
+import 'package:amal_marketplace/state/auth_state.dart';
 import 'package:amal_marketplace/state/cart_state.dart';
 import 'package:amal_marketplace/state/wishlist_state.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +31,16 @@ void main() {
     required CatalogService service,
     CartState? cart,
     WishlistState? wishlist,
+    AuthController? auth,
+    OrderApi? api,
   }) {
     return MultiProvider(
       providers: [
         Provider<CatalogService>.value(value: service),
+        Provider<OrderApi>.value(value: api ?? FakeOrderApi()),
+        ChangeNotifierProvider<AuthController>.value(
+          value: auth ?? FakeAuthController(),
+        ),
         ChangeNotifierProvider<CartState>.value(
           value: cart ?? CartState(prefs),
         ),
@@ -159,9 +167,7 @@ void main() {
     expect(find.text('No written reviews yet.'), findsOneWidget);
   });
 
-  testWidgets('checkout totals delivery and validates customer details', (
-    tester,
-  ) async {
+  testWidgets('checkout asks guests to sign in first', (tester) async {
     final product = buildProduct(price: 1000, salePrice: 900, stock: 10);
     final cart = CartState(prefs)..add(product, quantity: 2);
 
@@ -174,9 +180,32 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('Sign in to check out'), findsOneWidget);
+    expect(find.text('Sign in or create account'), findsOneWidget);
+    expect(find.text('Pay with Paystack'), findsNothing);
+  });
+
+  testWidgets('checkout totals delivery and validates customer details', (
+    tester,
+  ) async {
+    final product = buildProduct(price: 1000, salePrice: 900, stock: 10);
+    final cart = CartState(prefs)..add(product, quantity: 2);
+    final api = FakeOrderApi();
+
+    await tester.pumpWidget(
+      wrap(
+        const CheckoutScreen(),
+        service: FakeCatalogService(products: [product]),
+        cart: cart,
+        auth: FakeAuthController(signedIn: true, name: ''),
+        api: api,
+      ),
+    );
+    await tester.pumpAndSettle();
+
     expect(find.textContaining('3,800'), findsOneWidget);
 
-    final submit = find.text('Place order on WhatsApp');
+    final submit = find.text('Pay with Paystack');
     await tester.ensureVisible(submit);
     await tester.pumpAndSettle();
     await tester.tap(submit);
@@ -184,5 +213,6 @@ void main() {
 
     expect(find.text('Full name is required'), findsOneWidget);
     expect(cart.itemCount, 2);
+    expect(api.lastRequest, isNull);
   });
 }

@@ -1,6 +1,9 @@
+import 'package:amal_marketplace/models/order.dart';
 import 'package:amal_marketplace/models/product.dart';
 import 'package:amal_marketplace/models/review.dart';
 import 'package:amal_marketplace/services/catalog_service.dart';
+import 'package:amal_marketplace/services/order_api.dart';
+import 'package:amal_marketplace/state/auth_state.dart';
 
 Product buildProduct({
   String id = 'p1',
@@ -120,4 +123,135 @@ class FakeCatalogService implements CatalogService {
   }) async {
     return _reviews.where((r) => r.productId == productId).take(limit).toList();
   }
+}
+
+class FakeAuthController extends AuthController {
+  FakeAuthController({
+    bool signedIn = false,
+    String? name,
+    String? email,
+  }) : _userId = signedIn ? 'user-1' : null,
+       _name = name ?? (signedIn ? 'Test Buyer' : null),
+       _email = email ?? (signedIn ? 'buyer@example.com' : null);
+
+  String? _userId;
+  String? _name;
+  String? _email;
+
+  @override
+  String? get userId => _userId;
+
+  @override
+  String? get email => _email;
+
+  @override
+  String? get displayName => _name;
+
+  @override
+  String? get phone => _userId == null ? null : '08012345678';
+
+  @override
+  Future<void> signIn({required String email, required String password}) async {
+    _userId = 'user-1';
+    _email = email;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String fullName,
+    required String phone,
+  }) async {
+    _userId = 'user-1';
+    _email = email;
+    _name = fullName;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {}
+
+  @override
+  Future<void> updateProfile({
+    required String fullName,
+    required String phone,
+  }) async {
+    _name = fullName;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> signOut() async {
+    _userId = null;
+    notifyListeners();
+  }
+}
+
+class FakeOrderApi implements OrderApi {
+  FakeOrderApi({this.paymentStatus = 'pending'});
+
+  final String paymentStatus;
+  PlaceOrderRequest? lastRequest;
+
+  @override
+  Future<PlacedOrder> placeOrder(PlaceOrderRequest request) async {
+    lastRequest = request;
+    const subtotal = 0.0;
+    return PlacedOrder(
+      reference: 'AMAL-TEST-1',
+      subtotal: subtotal,
+      discount: 0,
+      deliveryFee: 0,
+      total: subtotal,
+      lines: request.items
+          .map(
+            (item) => PlacedOrderLine(
+              name: item.productId,
+              quantity: item.quantity,
+              unitPrice: 0,
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  @override
+  Future<List<OrderSummary>> listOrders() async => const [];
+
+  @override
+  Future<OrderDetail> fetchOrder(String reference) async {
+    return OrderDetail(
+      id: 'order-1',
+      reference: reference,
+      customerName: 'Test Buyer',
+      customerPhone: '08012345678',
+      customerEmail: 'buyer@example.com',
+      deliveryAddress: '1 Test Street',
+      deliveryCity: 'Jimeta',
+      deliveryState: 'Adamawa',
+      deliveryMethod: 'standard',
+      deliveryFee: 0,
+      deliveryNote: null,
+      estimatedDelivery: '2 - 5 business days',
+      subtotal: 1000,
+      discount: 0,
+      couponCode: null,
+      total: 1000,
+      status: 'pending',
+      paymentMethod: 'cash_on_delivery',
+      paymentStatus: paymentStatus,
+      createdAt: DateTime(2026, 1, 1),
+      items: const [
+        OrderLine(productName: 'Test phone', quantity: 1, unitPrice: 1000),
+      ],
+    );
+  }
+
+  @override
+  Future<String?> startPaystack(String reference) async => null;
+
+  @override
+  Future<String> confirmPaystack(String reference) async => paymentStatus;
 }

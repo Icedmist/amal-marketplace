@@ -27,7 +27,8 @@ class AboutScreen extends StatelessWidget {
           const SizedBox(height: 22),
           const _Feature(
             title: 'Verified checkout',
-            body: 'Place your order on WhatsApp and confirm payment with AMAL',
+            body:
+                'Sign in, pay securely with Paystack or on delivery, and track every order in the app',
           ),
           const _Feature(
             title: 'Fast Delivery',

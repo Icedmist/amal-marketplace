@@ -5,8 +5,9 @@
 ```
 Flutter app (Android)
   └─ CatalogService ──► Supabase REST (products, categories, reviews)
+  └─ AuthController ──► Supabase Auth + profiles/addresses/notifications
   └─ CartState / WishlistState ──► SharedPreferences (device-local)
-  └─ CheckoutScreen ──► delivery fee + order summary ──► wa.me
+  └─ MobileOrderApi ──► web app /api/public/mobile/* (orders, Paystack)
 ```
 
 The mobile app is a native Flutter client for the same marketplace as:
@@ -19,8 +20,9 @@ The mobile app is a native Flutter client for the same marketplace as:
 |------|--------|
 | Supabase URL | `https://jwksdthoybvvtcgtwojr.supabase.co` |
 | Auth key | Publishable key (same as web; RLS-protected) |
-| Tables read | `products`, `categories`, `reviews` |
-| Tables not written | `orders`, `reviews` (see known gaps) |
+| Tables read | `products`, `categories`, `reviews`, `orders`, `profiles`, `addresses`, `notifications` |
+| Writes | `orders`/`order_items` only through the web mobile API; profiles, addresses and notifications directly under RLS |
+| Mobile API | `https://amal-market-place.lovable.app/api/public/mobile/*` |
 
 Product list fields mirror the web catalog select list (price, sale_price,
 flags, stock, colors, sizes, specifications, images, etc.). Only `published`
