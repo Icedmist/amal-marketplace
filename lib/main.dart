@@ -4,10 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'config/brand.dart';
 import 'config/supabase_config.dart';
 import 'screens/shell_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'services/catalog_service.dart';
+import 'services/order_api.dart';
+import 'state/auth_state.dart';
 import 'state/cart_state.dart';
 import 'state/wishlist_state.dart';
 import 'theme/app_theme.dart';
@@ -38,10 +41,19 @@ class AmalApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final supabase = Supabase.instance.client;
     return MultiProvider(
       providers: [
-        Provider<CatalogService>(
-          create: (_) => CatalogService(Supabase.instance.client),
+        Provider<SupabaseClient>.value(value: supabase),
+        Provider<CatalogService>(create: (_) => CatalogService(supabase)),
+        Provider<OrderApi>(
+          create: (_) => MobileOrderApi(
+            supabase: supabase,
+            baseUrl: AmalBrand.webAppUrl,
+          ),
+        ),
+        ChangeNotifierProvider<AuthController>(
+          create: (_) => SupabaseAuthController(supabase),
         ),
         ChangeNotifierProvider(create: (_) => CartState(prefs)),
         ChangeNotifierProvider(create: (_) => WishlistState(prefs)),

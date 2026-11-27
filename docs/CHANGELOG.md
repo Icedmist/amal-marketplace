@@ -5,6 +5,64 @@ Keep newest entries at the top. Link PRs/commits when available.
 
 ---
 
+## 2026-11-27 — Shopper accounts, server-validated checkout and order tracking
+
+**Why:** The Flutter app was guest-only and WhatsApp-only, while the web app
+already had accounts, saved addresses, server-priced orders, Paystack and
+tracking. This brings the shopper side of the app to parity.
+
+### Changes
+
+1. **Accounts**
+   - `lib/state/auth_state.dart`: Supabase email/password session controller
+     with profile loading, sign-up, sign-in, password reset, profile update and
+     sign-out.
+   - `lib/screens/auth_screen.dart`: sign in, create account and forgot-password
+     flows with Nigerian phone normalisation.
+
+2. **Account screen**
+   - Tabs for **Orders**, **Profile**, **Addresses** and **Alerts**; sign-out.
+   - Orders list, editable profile, saved addresses (add, default, delete) and
+     notifications with unread state.
+   - Guests still see the brand header, support, delivery and about sections.
+
+3. **Checkout**
+   - Checkout is now gated on a signed-in account.
+   - Payment methods: Paystack, WhatsApp confirmation and cash on delivery.
+   - Totals, stock, delivery fee and coupons are recalculated on the server;
+     the app only sends product ids, quantities and delivery details.
+   - The cart is cleared only after the server has created the order.
+
+4. **Order confirmation and tracking**
+   - `lib/screens/order_detail_screen.dart`: status timeline, items, delivery
+     details, totals, payment state, “Pay now with Paystack” and a re-check
+     action that polls Paystack after returning from the browser.
+
+5. **Mobile API in the web app**
+   - Token-authenticated routes under `/api/public/mobile/`:
+     `checkout`, `orders` and `orders/:reference` (read, `pay`, `confirm`).
+   - `placeOrder` logic moved to `src/lib/checkout.server.ts` so web and mobile
+     share exactly the same validation, pricing and coupon rules.
+   - Also fixed a leftover `settings` reference in `seller.functions.ts` and
+     the two `Link to="/"` type errors in the web app.
+
+### Verification
+
+- `flutter analyze` → no issues
+- `flutter test` → 16 tests pass
+- `flutter build apk --debug` → succeeds
+- Web: `tsc --noEmit` → clean, `vite build` → succeeds
+- Mobile API returns `401 {"error":"Sign in to continue."}` without a token
+
+### Follow-ups
+
+- [ ] Google sign-in on Android (needs OAuth deep links)
+- [ ] Server-side review writing and multi-image gallery
+- [ ] Saved-for-later and recently-viewed sync
+- [ ] Seller and admin screens in the app
+
+---
+
 ## 2026-11-24 — v1.1.0: compile fix, checkout and catalog completion
 
 **Why:** A functionality review found the app did not compile against the locked
